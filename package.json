@@ -1,38 +1,13 @@
 {
   "name": "redwoodjs-stripe",
-  "version": "0.1.0-rc.5",
+  "private": true,
   "description": "A Redwood/Stripe integration made easy",
-  "main": "./dist/cjs/api/index.js",
-  "bin": "./src/cli/cli.js",
-  "files": [
-    "src",
-    "dist",
-    "templates",
-    "*.js"
-  ],
-  "targets": {
-    "api-cjs": {
-      "source": "src/api/index.js",
-      "isLibrary": true,
-      "context": "node",
-      "outputFormat": "commonjs"
-    },
-    "web-cjs": {
-      "source": "src/web/index.js",
-      "isLibrary": true,
-      "context": "browser",
-      "outputFormat": "commonjs",
-      "includeNodeModules": [
-        "@stripe/stripe-js"
-      ]
-    }
-  },
   "scripts": {
-    "dev": "yarn dev:watch",
-    "dev:watch": "yarn chokidar 'src/**/*' -c 'yarn dev:build \"$1\"'",
-    "dev:build": "yarn build && yalc push && (cd \"$1\" && yalc add redwoodjs-stripe);",
-    "build": "parcel build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "release": "yarn build && lerna publish",
+    "build": "yarn tasks --task build",
+    "tasks": "./scripts/tasks.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sync": "yarn tasks --task sync --target"
   },
   "repository": {
     "type": "git",
@@ -51,19 +26,20 @@
   "devDependencies": {
     "@apollo/client": "^3.6.9",
     "@babel/runtime-corejs3": "^7.17.9",
-    "@parcel/config-default": "^2.8.2",
-    "@parcel/transformer-graphql": "latest",
+    "chokidar": "^3.5.3",
     "chokidar-cli": "^3.0.0",
+    "cli-testing-library": "^1.0.4",
     "core-js": "^3.22.5",
     "dir-tree": "^1.0.1",
+    "esbuild": "^0.17.18",
+    "glob": "^10.2.7",
     "graphql-tag": "2.x",
     "jest": "^28.1.1",
-    "parcel": "^2.8.2",
-    "yalc": "^1.0.0-pre.53"
+    "lerna": "^7.0.2",
+    "sync-directory": "^6.0.4"
   },
   "dependencies": {
     "@stripe/stripe-js": "1.29.0",
-    "cli-testing-library": "^1.0.4",
     "envfile": "^6.17.0",
     "fs-extra": "^10.1.0",
     "listr": "^0.14.3",
@@ -74,10 +50,13 @@
   },
   "peerDependencies": {
     "@apollo/client": "3.x",
-    "@redwoodjs/core": "1.x",
-    "@redwoodjs/web": "1.x",
     "graphql-tag": "2.x",
     "react": "17.0.2",
     "react-dom": "17.0.2"
-  }
+  },
+  "workspaces": [
+    "api",
+    "web",
+    "cli"
+  ]
 }
